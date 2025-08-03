@@ -267,4 +267,8 @@ For support and questions:
 
 ---
 
+<<<<<<< HEAD
 **Note**: This is a demo implementation. For production use, implement proper authentication, database storage, and security measures. 
+=======
+**Note**: This is a demo implementation. For production use, implement proper authentication, database storage, and security measures. 
+>>>>>>> 2e6698e (new update with dashbord)
