@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's News - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-header h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 10px;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-menu a.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .nav-menu i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .posts-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease;
+        }
+
+        .post-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .post-item:last-child {
+            border-bottom: none;
+        }
+
+        .post-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .post-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+
+            .main-content {
+                order: 1;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Today's News</h2>
+                <p>Admin Dashboard</p>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="active" onclick="showSection('dashboard')">
+                    <i>📊</i> Dashboard
+                </a></li>
+                <li><a href="#posts" onclick="showSection('posts')">
+                    <i>📝</i> Manage Posts
+                </a></li>
+                <li><a href="#new-post" onclick="showSection('new-post')">
+                    <i>➕</i> Add New Post
+                </a></li>
+                <li><a href="#ads" onclick="showSection('ads')">
+                    <i>🔧</i> Ads Sections
+                </a></li>
+                <li><a href="#settings" onclick="showSection('settings')">
+                    <i>⚙️</i> Settings
+                </a></li>
+                <li><a href="index.html" target="_blank">
+                    <i>🌐</i> View Website
+                </a></li>
+                <li><a href="#" onclick="logout()">
+                    <i>🚪</i> Logout
+                </a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Welcome back, Admin!</h1>
+                <div class="user-info">
+                    <span>Admin User</span>
+                    <div class="user-avatar">A</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="content-section">
+                <h2 class="section-title">Dashboard Overview</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">125</div>
+                        <div class="stat-label">Total Posts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1.2K</div>
+                        <div class="stat-label">Monthly Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Comments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Categories</div>
+                    </div>
+                </div>
+
+                <div class="content-section">
+                    <h3>Recent Activity</h3>
+                    <div class="posts-list">
+                        <div class="post-item">
+                            <div class="post-info">
+                                <h4>RRB Technician Recruitment 2025</h4>
+                                <p>Published 2 hours ago</p>
+                            </div>
+                            <div class="post-actions">
+                                <button class="btn btn-small btn-edit">Edit</button>
+                                <button class="btn btn-small btn-delete">Delete</button>
+                            </div>
+                        </div>
+                        <div class="post-item">
+                            <div class="post-info">
+                                <h4>Intelligence Bureau ACIO Recruitment</h4>
+                                <p>Published 5 hours ago</p>
+                            </div>
+                            <div class="post-actions">
+                                <button class="btn btn-small btn-edit">Edit</button>
+                                <button class="btn btn-small btn-delete">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Management Section -->
+            <div id="posts" class="content-section hidden">
+                <h2 class="section-title">Manage Posts</h2>
+                
+                <div class="form-group">
+                    <input type="text" placeholder="Search posts..." style="max-width: 300px;">
+                </div>
+
+                <div class="posts-list">
+                    <div class="post-item">
+                        <div class="post-info">
+                            <h4>RRB Technician Recruitment 2025: Notification for 6180 posts</h4>
+                            <p>Category: Government Job | Published: July 26, 2025</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="btn btn-small btn-edit" onclick="editPost(1)">Edit</button>
+                            <button class="btn btn-small btn-delete" onclick="deletePost(1)">Delete</button>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-info">
+                            <h4>Intelligence Bureau ACIO Recruitment 2025</h4>
+                            <p>Category: Government Job | Published: July 26, 2025</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="btn btn-small btn-edit" onclick="editPost(2)">Edit</button>
+                            <button class="btn btn-small btn-delete" onclick="deletePost(2)">Delete</button>
+                        </div>
+                    </div>
+                    <div class="post-item">
+                        <div class="post-info">
+                            <h4>SSC CHSL Recruitment 2025: 3131 Vacancy Notification</h4>
+                            <p>Category: Government Job | Published: July 15, 2025</p>
+                        </div>
+                        <div class="post-actions">
+                            <button class="btn btn-small btn-edit" onclick="editPost(3)">Edit</button>
+                            <button class="btn btn-small btn-delete" onclick="deletePost(3)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Post Section -->
+            <div id="new-post" class="content-section hidden">
+                <h2 class="section-title">Add New Post</h2>
+                
+                <form id="newPostForm">
+                    <div class="form-group">
+                        <label for="postTitle">Post Title</label>
+                        <input type="text" id="postTitle" name="postTitle" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postCategory">Category</label>
+                        <select id="postCategory" name="postCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="government-job">Government Job</option>
+                            <option value="technology">Technology</option>
+                            <option value="health">Health</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="education">Education</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postImage">Featured Image URL</label>
+                        <input type="url" id="postImage" name="postImage" placeholder="https://example.com/image.jpg">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postContent">Post Content</label>
+                        <textarea id="postContent" name="postContent" required placeholder="Write your post content here..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postTags">Tags (comma separated)</label>
+                        <input type="text" id="postTags" name="postTags" placeholder="job, recruitment, government">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Publish Post</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                </form>
+            </div>
+
+            <!-- Ads Sections -->
+            <div id="ads" class="content-section hidden">
+                <h2 class="section-title">Manage Ads Sections</h2>
+                
+                <div class="form-group">
+                    <label for="adsSection1">Ads Section 1 Content</label>
+                    <textarea id="adsSection1" name="adsSection1" rows="4" placeholder="Enter content for Ads Section 1..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="adsSection2">Ads Section 2 Content</label>
+                    <textarea id="adsSection2" name="adsSection2" rows="4" placeholder="Enter content for Ads Section 2..."></textarea>
+                </div>
+
+                <button class="btn btn-primary" onclick="updateAdsSections()">Update Ads Sections</button>
+            </div>
+
+            <!-- Settings Section -->
+            <div id="settings" class="content-section hidden">
+                <h2 class="section-title">Website Settings</h2>
+                
+                <div class="form-group">
+                    <label for="siteTitle">Site Title</label>
+                    <input type="text" id="siteTitle" name="siteTitle" value="Today's News">
+                </div>
+
+                <div class="form-group">
+                    <label for="siteDescription">Site Description</label>
+                    <textarea id="siteDescription" name="siteDescription" rows="3">We provide all useful information government job, information, health tips, current affair etc.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail" name="adminEmail" value="admin@todaysnews.com">
+                </div>
+
+                <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Post Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Edit Post</h2>
+            <form id="editPostForm">
+                <div class="form-group">
+                    <label for="editTitle">Post Title</label>
+                    <input type="text" id="editTitle" name="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="editContent">Post Content</label>
+                    <textarea id="editContent" name="editContent" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Post</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functionality
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+
+            // Update active nav link
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Form submission
+        document.getElementById('newPostForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            
+            // Simulate form submission
+            alert('Post published successfully!');
+            this.reset();
+        });
+
+        // Edit post functionality
+        function editPost(postId) {
+            document.getElementById('editModal').style.display = 'block';
+            // In a real application, you would fetch post data here
+            document.getElementById('editTitle').value = 'Sample Post Title';
+            document.getElementById('editContent').value = 'Sample post content...';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        // Delete post functionality
+        function deletePost(postId) {
+            if (confirm('Are you sure you want to delete this post?')) {
+                alert('Post deleted successfully!');
+            }
+        }
+
+        // Update Ads sections
+        function updateAdsSections() {
+            const section1 = document.getElementById('adsSection1').value;
+            const section2 = document.getElementById('adsSection2').value;
+            
+            // In a real application, you would save this to a database
+            alert('Ads sections updated successfully!');
+        }
+
+        // Save settings
+        function saveSettings() {
+            alert('Settings saved successfully!');
+        }
+
+        // Save draft
+        function saveDraft() {
+            alert('Draft saved successfully!');
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('admin_logged_in');
+                localStorage.removeItem('admin_username');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            if (localStorage.getItem('admin_logged_in') !== 'true') {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Set default active section
+            showSection('dashboard');
+            
+            // Update user info
+            const username = localStorage.getItem('admin_username') || 'Admin';
+            document.querySelector('.user-info span').textContent = username;
+        });
+    </script>
+</body>
+</html> 
