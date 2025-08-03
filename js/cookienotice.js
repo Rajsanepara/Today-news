@@ -38,7 +38,7 @@
     var buttonsClass = 'cookie-choices-buttons';
     var buttonClass = 'cookie-choices-button';
     var singletonClass = 'singleton-element';
-    var dismissLinkId = 'cookieChoiceDismiss';
+    var dismissLinkId = 'cookieChoiceDismiss'; 
 
     function _createHeaderElement(cookieText, dismissText, linkText, linkHref) {
       // Clean the HTML Tags from cookieText
